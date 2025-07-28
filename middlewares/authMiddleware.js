@@ -16,17 +16,17 @@ const protect = async (req, res, next) => {
 
             // Get user based on role
             let user;
-            if (decoded.user && decoded.user.role === 'captain') {
-                user = await Captain.findById(decoded.user.id).select('-password');
-                user.role = 'captain'; // Ensure role is set
+            if (decoded.user && decoded.user.role === 'admin') {
+                user = await admin.findById(decoded.user.id).select('-password');
+                user.role = 'admin'; // Ensure role is set
             } else if (decoded.user) {
                 user = await User.findById(decoded.user.id).select('-password');
                 user.role = 'user'; // Ensure role is set
             } else {
                 // Legacy token format
-                if (decoded.role === 'captain') {
-                    user = await Captain.findById(decoded.id).select('-password');
-                    user.role = 'captain';
+                if (decoded.role === 'admin') {
+                    user = await admin.findById(decoded.id).select('-password');
+                    user.role = 'admin';
                 } else {
                     user = await User.findById(decoded.id).select('-password');
                     user.role = 'user';
@@ -49,7 +49,7 @@ const protect = async (req, res, next) => {
 };
 
 
-// Middleware to authorize based on user or captain model
+// Middleware to authorize based on user or admin model
 const authorize = (expectedRole) => {
     return (req, res, next) => {
       if (!req.user || req.user.role !== expectedRole) {

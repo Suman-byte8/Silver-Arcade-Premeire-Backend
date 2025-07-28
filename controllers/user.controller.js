@@ -110,5 +110,36 @@ async function loginUser(req, res) {
     }
 };
 
+// Get user profile
+async function getUserProfile(req, res) {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }   
+        res.status(200).json({
+            success: true,
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                memberShipType: user.memberShipType,
+                memberShipStartDate: user.memberShipStartDate,
+                memberShipEndDate: user.memberShipEndDate,
+                phoneNumber: user.phoneNumber,
+                whatsAppNumber: user.whatsAppNumber,
+                address: user.address,
+                alternateNumber: user.alternateNumber
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        res.status(500).json({ message: 'Server error while fetching user profile' });
+    }
+};
 
-module.exports = { registerUser, loginUser };
+
+module.exports = { registerUser, loginUser, getUserProfile };

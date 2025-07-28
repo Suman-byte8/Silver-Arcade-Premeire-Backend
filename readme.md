@@ -116,3 +116,61 @@ curl -X POST http://localhost:3000/api/users/login \
 -H "Content-Type: application/json" \
 -d '{"email": "john.doe@example.com", "password": "Password123!"}'
 ```
+
+### 3. Get User Profile
+
+#### GET /api/users/profile/:userId
+Get detailed user profile information. Requires authentication.
+
+#### Headers
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+#### Success Response (200 OK)
+```json
+{
+    "success": true,
+    "user": {
+        "id": "68878f18b7f869bdbe0acda9",
+        "firstName": "John",
+        "lastName": "Doe",
+        "username": "johndoe123",
+        "email": "john.doe@example.com",
+        "role": "user",
+        "memberShipType": "premium",
+        "memberShipStartDate": "2025-07-28T00:00:00.000Z",
+        "memberShipEndDate": "2026-07-28T00:00:00.000Z",
+        "phoneNumber": "9876543210",
+        "whatsAppNumber": "9876543210",
+        "address": "123 Main Street, City, Country - 123456",
+        "alternateNumber": "8765432109"
+    }
+}
+```
+
+#### Error Response (404 Not Found)
+```json
+{
+    "message": "User not found"
+}
+```
+
+#### Error Response (401 Unauthorized)
+```json
+{
+    "message": "Not authorized to access this route"
+}
+```
+
+#### Notes
+- Requires valid JWT token in Authorization header
+- Returns all user fields except password
+- User ID must match authenticated user's ID
+- Dates are returned in ISO 8601 format
+
+#### Example Usage
+```bash
+curl -X GET http://localhost:3000/api/users/profile/68878f18b7f869bdbe0acda9 \
+-H "Authorization: Bearer <your_jwt_token>"
+```
