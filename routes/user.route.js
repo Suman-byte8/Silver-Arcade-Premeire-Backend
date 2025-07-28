@@ -19,8 +19,13 @@ const validateRegistration = [
     check('password', 'Password is required').not().isEmpty()
 ];
 
+// validate login credentials
+
 // Register route
 router.post('/register', validateRegistration, registerUser);
+
+// login route
+// router.post('/login',loginUser)
 
 module.exports = router;
 

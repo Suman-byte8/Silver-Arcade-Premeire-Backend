@@ -1,6 +1,7 @@
 const User = require('../schema/user.model');
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
+const { generateToken } = require('../middlewares/authMiddleware');
 
 // Register a new user
 async function registerUser(req, res) {
@@ -42,15 +43,31 @@ async function registerUser(req, res) {
         // Save the user to the database
         await user.save();
 
-        res.status(201).json({
-            message: 'User registered successfully',
+        // generate jwt
+        const payload = {
             user: {
                 id: user._id,
-                username: user.username,
-                email: user.email,
                 role: user.role
             }
+        };
+
+        generateToken(payload.user.id, payload.user.role).then(token => {
+            res.status(201).json({
+                message: 'User registered successfully',
+                user: {
+                    id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    role: user.role,
+                },
+                token: token
+            });
+        }
+        ).catch(err => {
+            console.error('Token generation error:', err);
+            res.status(500).json({ message: 'Server error during token generation' });
         });
+
     } catch (error) {
         console.error('Registration error:', error);
         res.status(500).json({ message: 'Server error during registration' });
