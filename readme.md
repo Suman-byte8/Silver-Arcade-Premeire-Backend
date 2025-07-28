@@ -1,8 +1,10 @@
 # Silver Arcade Premiere Backend
 
-## User Registration API Documentation
+## API Documentation
 
-### POST /api/users/register
+### 1. User Registration
+
+#### POST /api/users/register
 Register a new user in the system.
 
 #### Request Body
@@ -62,3 +64,55 @@ Register a new user in the system.
 - Email must be unique and valid
 - Username must be unique
 - Passwords are securely hashed before storage
+
+### 2. User Login
+
+#### POST /api/users/login
+Authenticate a user and receive a JWT token.
+
+#### Request Body
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "Password123!"
+}
+```
+
+#### Success Response (200 OK)
+```json
+{
+    "message": "User logged in successfully",
+    "user": {
+        "id": "68878f18b7f869bdbe0acda9",
+        "username": "johndoe123",
+        "email": "john.doe@example.com",
+        "role": "user"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ODc4ZjE4YjdmODY5YmRiZTBhY2RhOSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzUzNzE3MDIyLCJleHAiOjE3NTYzMDkwMjJ9.KcEjpCzZbr1miO9taJO6OzKC2slfmCFm7ozCyddc5aA"
+}
+```
+
+#### Error Response (400 Bad Request)
+```json
+{
+    "message": "Invalid credentials"
+}
+```
+
+#### Required Fields
+- email: String (valid email format)
+- password: String
+
+#### Notes
+- Email must be registered in the system
+- Password must match the stored hashed password
+- Successful login returns a JWT token for authentication
+- Token should be included in subsequent requests as Bearer token
+- Token expires after 30 days
+
+#### Example Usage
+```bash
+curl -X POST http://localhost:3000/api/users/login \
+-H "Content-Type: application/json" \
+-d '{"email": "john.doe@example.com", "password": "Password123!"}'
+```

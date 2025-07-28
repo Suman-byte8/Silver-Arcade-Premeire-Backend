@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser } = require('../controllers/user.controller');
+const { registerUser, loginUser } = require('../controllers/user.controller');
 const { check } = require('express-validator');
 
 // Validation middleware
@@ -20,12 +20,16 @@ const validateRegistration = [
 ];
 
 // validate login credentials
+const validateLogin = [
+    check('email', 'Please include a valid email').isEmail(),
+    check('password', 'Password is required').not().isEmpty()
+];
 
 // Register route
 router.post('/register', validateRegistration, registerUser);
 
 // login route
-// router.post('/login',loginUser)
+router.post('/login',validateLogin,loginUser)
 
 module.exports = router;
 
