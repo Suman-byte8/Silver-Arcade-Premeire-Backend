@@ -74,4 +74,41 @@ async function registerUser(req, res) {
     }
 };
 
-module.exports = { registerUser };
+// login user
+// Alternative async/await version
+async function loginUser(req, res) {
+    const { email, password } = req.body;
+    try {
+        // Check if user exists
+        let user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+        
+        // Check password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+        
+        // Generate token
+        const token = await generateToken(user._id, user.role);
+        
+        res.status(200).json({
+            message: 'User logged in successfully',
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+            },
+            token: token
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ message: 'Server error during login' });
+    }
+};
+
+
+module.exports = { registerUser, loginUser };
