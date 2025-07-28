@@ -2,6 +2,7 @@ const User = require('../schema/user.model');
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const { generateToken } = require('../middlewares/authMiddleware');
+const userActivity = require('../schema/userActivity');
 
 // Register a new user
 async function registerUser(req, res) {
@@ -68,6 +69,13 @@ async function registerUser(req, res) {
             res.status(500).json({ message: 'Server error during token generation' });
         });
 
+        await userActivity.create({
+            userId: newUser._id,
+            action: "signup",
+            userAgent: req.headers["user-agent"],
+            ipAddress: req.ip,
+          });
+
     } catch (error) {
         console.error('Registration error:', error);
         res.status(500).json({ message: 'Server error during registration' });
@@ -104,6 +112,14 @@ async function loginUser(req, res) {
             },
             token: token
         });
+
+        await userActivity.create({
+            userId: user._id,
+            action: "login",
+            userAgent: req.headers["user-agent"],
+            ipAddress: req.ip,
+          });
+          
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ message: 'Server error during login' });
@@ -140,6 +156,7 @@ async function getUserProfile(req, res) {
         res.status(500).json({ message: 'Server error while fetching user profile' });
     }
 };
+
 
 
 module.exports = { registerUser, loginUser, getUserProfile };

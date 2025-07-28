@@ -16,10 +16,15 @@ app.get('/', (req, res) => {
 });
 
 // Import routes
+
+// User routes
 const userRoutes = require('./routes/user.route');
+// admin routes
+const adminRoutes = require('./routes/admin.route');
 
 // Use routes
 app.use('/api/users', userRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Start the server
 connectDB().then(() => {
