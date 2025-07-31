@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerAdmin, loginAdmin, getAdminProfile,populateUserActivity } = require('../controllers/admin.controller');
+const { registerAdmin, loginAdmin, getAdminProfile,populateUserActivity,addRooms } = require('../controllers/admin.controller');
 const { check } = require('express-validator');
 const { protect, authorize } = require('../middlewares/authMiddleware');
 
@@ -23,9 +23,16 @@ const validateAdminLogin = [
 
 
 // Admin routes
+
+// Register Admin
 router.post('/register', validateAdminRegistration, registerAdmin);
+// Login Admin
 router.post('/login', validateAdminLogin, loginAdmin);
+// Get Admin Profile
 router.get('/profile/:adminId', protect, authorize('admin'), getAdminProfile);
+// Populate User Activity
 router.get('/user-activity', protect, authorize('admin'), populateUserActivity);
+// add rooms
+router.post('/add-rooms', protect, authorize('admin'), addRooms);
 
 module.exports = router;

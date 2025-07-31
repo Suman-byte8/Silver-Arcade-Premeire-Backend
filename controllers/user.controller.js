@@ -157,6 +157,11 @@ async function getUserProfile(req, res) {
     }
 };
 
+// user ratings 
+async function userRatings(req,res){
+    
+}
+
 
 
 module.exports = { registerUser, loginUser, getUserProfile };

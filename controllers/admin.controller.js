@@ -3,21 +3,22 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userActivity = require("../schema/userActivity");
 const { generateToken } = require('../middlewares/authMiddleware');
+const Room = require('../schema/rooms.model');
 
 
 
 // Register Admin
 async function registerAdmin(req, res) {
     try {
-        const { 
-            firstName, 
-            lastName, 
-            username, 
-            email, 
-            password, 
+        const {
+            firstName,
+            lastName,
+            username,
+            email,
+            password,
             phoneNumber,
             permissions,
-            role 
+            role
         } = req.body;
 
         // Check if admin exists
@@ -119,7 +120,7 @@ async function loginAdmin(req, res) {
 async function getAdminProfile(req, res) {
     try {
         const admin = await Admin.findById(req.user.id).select('-password');
-        
+
         if (!admin) {
             return res.status(404).json({ message: 'Admin not found' });
         }
@@ -148,8 +149,8 @@ async function getAdminProfile(req, res) {
     }
 }
 
-// admin controllers
-async function populateUserActivity(req, res){
+// Populate User Activity
+async function populateUserActivity(req, res) {
     try {
         const activities = await userActivity.find().populate('userId', 'username email');
         res.status(200).json({
@@ -162,9 +163,36 @@ async function populateUserActivity(req, res){
     }
 }
 
-module.exports = { 
-    registerAdmin, 
-    loginAdmin, 
+// add rooms
+async function addRooms(req, res) {
+    try {
+        const { roomName, roomType, roomCapacity, roomPrice, roomDescription, roomImage, roomStatus } = req.body;
+        const newRoom = new Room({
+            roomName,
+            roomType,
+            roomCapacity,
+            roomPrice,
+            roomDescription,
+            roomImage,
+            roomStatus
+        });
+        await newRoom.save();
+        res.status(201).json({
+            success: true,
+            message: 'Room added successfully',
+            room: newRoom
+        });
+    } catch (error) {
+        console.error('Error adding room:', error);
+        res.status(500).json({ message: 'Server error while adding room' });
+    }
+}
+
+
+module.exports = {
+    registerAdmin,
+    loginAdmin,
     getAdminProfile,
-    populateUserActivity 
+    populateUserActivity,
+    addRooms
 };
