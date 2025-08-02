@@ -157,10 +157,6 @@ async function getUserProfile(req, res) {
     }
 };
 
-// user ratings 
-async function userRatings(req,res){
-    
-}
 
 
 
