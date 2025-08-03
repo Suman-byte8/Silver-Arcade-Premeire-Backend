@@ -1,8 +1,9 @@
 const router = require('express').Router();
-const { getHeroBanner, addHeroBanner, updateHeroBanner, deleteHeroBanner } = require('../../controllers/Dynamic Content/Home Page/heroBanner.controller');
 const { protect, authorize } = require('../../middlewares/authMiddleware');
 const upload = require('../../middlewares/uploadMiddleware');
 
+// routes for hero banner
+const { getHeroBanner, addHeroBanner, updateHeroBanner, deleteHeroBanner } = require('../../controllers/Dynamic Content/Home Page/heroBanner.controller');
 // get hero banner
 router.get('/hero-banner', protect, getHeroBanner);
 // add hero banner
@@ -35,6 +36,15 @@ router.put('/update-footer-link/:id', protect, authorize('admin'), updateFooterL
 // Delete Footer Link
 router.delete('/delete-footer-link/:id', protect, authorize('admin'), deleteFooterLink);
 
-
+// routes for membership block
+const { addMembershipBlock, updateMembershipBlock, deleteMembershipBlock, getMembershipBlocks } = require('../../controllers/Dynamic Content/Home Page/membershipBlock.controller');
+// Add Membership Block
+router.post('/add-membership-block', protect, authorize('admin'), upload.single('image'), addMembershipBlock);
+// Update Membership Block
+router.put('/update-membership-block/:id', protect, authorize('admin'), upload.single('image'), updateMembershipBlock);
+// Delete Membership Block
+router.delete('/delete-membership-block/:id', protect, authorize('admin'), deleteMembershipBlock);
+// Get Membership Blocks
+router.get('/get-membership-blocks', protect, getMembershipBlocks);
 
 module.exports = router;

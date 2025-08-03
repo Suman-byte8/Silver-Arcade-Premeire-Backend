@@ -727,3 +727,92 @@ Authorization: Bearer <JWT_TOKEN>
     "message": "Footer link deleted successfully"
 }
 ```
+### 9. Membership Block Management
+
+These endpoints manage the membership block content on the home page.
+
+#### GET /api/admin/content/get-membership-blocks
+
+Retrieve the current membership block content.
+
+##### Success Response (200 OK)
+
+```json
+{
+    "success": true,
+    "data": []
+}
+```
+
+#### POST /api/admin/content/add-membership-block
+
+Add a new membership block. Requires `multipart/form-data` for the image upload.
+
+##### Headers
+
+```
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: multipart/form-data
+```
+
+##### Form Data
+
+-   `title` (String): The title of the membership block.
+-   `description` (String): A short description.
+-   `url` (String): The URL the block should link to.
+-   `image` (File): The block image file.
+
+##### Success Response (201 Created)
+
+```json
+{
+    "success": true,
+    "message": "Membership Block added successfully",
+    "data": {
+        "title": "Get 20% Off",
+        "description": "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "image": "https://res.cloudinary.com/dybk0f5nc/image/upload/v1754211848/membership_blocks/f5g3v3g3g3g3g3g3g3g3.jpg",
+        "url": "https://offers-page",
+        "_id": "688f3a085e60b5d3e8f6b902",
+        "createdAt": "2025-08-03T09:30:48.834Z",
+        "__v": 0
+    }
+}
+```
+
+#### PUT /api/admin/content/update-membership-block/:id
+
+Update an existing membership block. Also uses `multipart/form-data` if a new image is provided.
+
+##### Headers
+
+```
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: multipart/form-data
+```
+
+##### Form Data
+
+-   `title` (String): The updated title.
+-   `description` (String): The updated description.
+-   `url` (String): The updated URL.
+-   `image` (File, optional): A new image file to replace the existing one.
+
+#### DELETE /api/admin/content/delete-membership-block/:id
+
+Delete a membership block by its ID.
+
+##### Headers
+
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+##### Success Response (200 OK)
+
+```json
+{
+    "success": true,
+    "message": "Membership Block deleted successfully"
+}
+```
