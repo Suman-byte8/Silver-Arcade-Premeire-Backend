@@ -340,3 +340,56 @@ Authorization: Bearer <JWT_TOKEN>
 - Passwords are hashed before storage
 - User activity is logged for security tracking
 - Only active admins can access protected routes
+
+### 5. Add a New Room
+#### POST /api/admin/add-room
+Add a new gaming room to the system. This endpoint requires `multipart/form-data` for image uploads.
+
+#### Headers
+```
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: multipart/form-data
+```
+
+#### Form Data
+- `roomName` (String): The name of the room.
+- `roomType` (String): The type of room (e.g., "Premium VIP", "Standard").
+- `roomCapacity` (Number): The maximum number of people the room can accommodate.
+- `roomPrice` (Number): The price of the room per session/hour.
+- `roomDescription` (String): A detailed description of the room and its features.
+- `roomImage` (File): The image file for the room.
+
+#### Success Response (201 Created)
+```json
+{
+    "success": true,
+    "message": "Room added successfully",
+    "room": {
+        "roomName": "Elite Gaming Suite Alpha",
+        "roomType": "Premium VIP",
+        "roomCapacity": 8,
+        "roomPrice": 2500,
+        "roomDescription": "Premium gaming sanctuary featuring:\n- 8 High-End Gaming PCs with RTX 4090\n- 360Hz Gaming Monitors\n- Herman Miller Gaming Chairs\n- Private Streaming Setup\n- RGB Ambient Lighting\n- Premium Audio System\n- Mini Refrigerator\n- Climate Control",
+        "roomImage": "https://res.cloudinary.com/dybk0f5nc/image/upload/v1754201449/silver-arcade/rooms/tdkfusad6wyi1haiypko.jpg",
+        "roomStatus": "available",
+        "_id": "688efd6ae65bb02c41f5efab",
+        "createdAt": "2025-08-03T06:10:50.695Z",
+        "__v": 0
+    }
+}
+```
+
+#### Image Upload with Cloudinary and Streamifier
+The image upload process is handled efficiently without saving files to the server's local disk.
+
+1.  **Middleware (`multer`)**: The route uses `multer` as middleware to process the `multipart/form-data`. Instead of saving the uploaded file to disk, `multer` is configured to hold the file in memory as a buffer.
+2.  **In-Memory Buffer**: The `req.file.buffer` contains the entire image file as raw binary data.
+3.  **`streamifier`**: The `streamifier` library creates a readable stream directly from the `buffer`. This is crucial because Cloudinary's Node.js SDK can work with streams.
+4.  **Cloudinary Upload Stream**: The `cloudinary.uploader.upload_stream` function is called. It's a writable stream that accepts the image data. We `pipe` the readable stream created by `streamifier` into this upload stream.
+5.  **Cloudinary Processing**: Cloudinary receives the stream, uploads the image to your cloud storage, and performs any specified transformations. Once complete, it invokes a callback function.
+6.  **URL Retrieval**: The callback function receives the result from Cloudinary, which includes the secure `url` of the uploaded image.
+7.  **Database Storage**: This URL is then saved as the `roomImage` field in the new room document in the MongoDB database.
+
+This stream-based approach is highly efficient and scalable as it avoids intermediate file I/O on the server, making it ideal for containerized or serverless environments.
+
+```

@@ -23,7 +23,7 @@ const roomsSchema = new mongoose.Schema({
     },
     roomImage: {
         type: String,
-        // required: true
+        required: true
     },
     roomStatus: {
         type: String,

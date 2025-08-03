@@ -163,10 +163,43 @@ async function populateUserActivity(req, res) {
     }
 }
 
+const cloudinary = require('../config/cloudinary')
+const streamifier = require('streamifier');
 // add rooms
 async function addRooms(req, res) {
     try {
-        const { roomName, roomType, roomCapacity, roomPrice, roomDescription, roomImage, roomStatus } = req.body;
+        const { roomName, roomType, roomCapacity, roomPrice, roomDescription, roomStatus } = req.body;
+        
+        let roomImage = '';
+        if(req.file){
+            try{
+                // Upload image to Cloudinary
+                let streamUpload = (file) => {
+                    return new Promise((resolve, reject) => {
+                        const stream = cloudinary.uploader.upload_stream(
+                            {
+                                folder: 'silver-arcade/rooms',
+                            },
+                            (error, result) => {
+                            if (result) {
+                                resolve(result);
+                            } else {
+                                reject(error);
+                            }
+                        });
+                        streamifier.createReadStream(file.buffer).pipe(stream);
+                    });
+                }
+                const result = await streamUpload(req.file);
+                roomImage = result.secure_url; // Get the secure URL of the uploaded image
+            }
+            catch (error) {
+                console.error('Error uploading image:', error);
+                return res.status(500).json({ message: 'Error uploading image' });
+            }
+        }
+        
+        
         const newRoom = new Room({
             roomName,
             roomType,
