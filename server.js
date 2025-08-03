@@ -21,10 +21,13 @@ app.get('/', (req, res) => {
 const userRoutes = require('./routes/user.route');
 // admin routes
 const adminRoutes = require('./routes/admin.route');
+// Home page content management routes
+const heroBannerRoutes = require('./routes/Content Change Routes/heroBanner.route');
 
 // Use routes
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/admin/content', heroBannerRoutes);
 
 // Start the server
 connectDB().then(() => {

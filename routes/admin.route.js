@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerAdmin, loginAdmin, getAdminProfile, populateUserActivity, addRooms } = require('../controllers/admin.controller');
+const { registerAdmin, loginAdmin, getAdminProfile, populateUserActivity, addRooms, updateRoomDetails } = require('../controllers/admin.controller');
 const { check } = require('express-validator');
 const { protect, authorize } = require('../middlewares/authMiddleware');
 const upload = require('../middlewares/uploadMiddleware');
@@ -21,8 +21,6 @@ const validateAdminLogin = [
     check('password', 'Password is required').not().isEmpty()
 ];
 
-
-
 // Admin routes
 
 // Register Admin
@@ -35,5 +33,7 @@ router.get('/profile/:adminId', protect, authorize('admin'), getAdminProfile);
 router.get('/user-activity', protect, authorize('admin'), populateUserActivity);
 // add rooms
 router.post('/add-rooms', protect, authorize('admin'), upload.single('roomImage'), addRooms);
+// Update Room Details
+router.put('/update-room-details/:roomId', protect, authorize('admin'), upload.single('roomImage'), updateRoomDetails);
 
 module.exports = router;
