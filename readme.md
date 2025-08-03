@@ -636,3 +636,94 @@ Authorization: Bearer <JWT_TOKEN>
     "message": "Curated offer deleted successfully"
 }
 ```
+### 8. Footer Links Management
+
+These endpoints manage the footer links.
+
+#### GET /api/admin/content/get-footer-links
+
+Retrieve all footer links.
+
+##### Success Response (200 OK)
+
+```json
+{
+    "success": true,
+    "footerLinks": []
+}
+```
+
+#### POST /api/admin/content/add-footer-link
+
+Add a new footer link.
+
+##### Headers
+
+```
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: application/json
+```
+
+##### Request Body
+
+```json
+{
+    "title": "About Us",
+    "path": "/about"
+}
+```
+
+##### Success Response (201 Created)
+
+```json
+{
+    "success": true,
+    "message": "Footer link added successfully",
+    "footerLink": {
+        "title": "About Us",
+        "path": "/about",
+        "_id": "688f2e855e60b5d3e8f6b8f5",
+        "createdAt": "2025-08-03T08:42:13.384Z",
+        "__v": 0
+    }
+}
+```
+
+#### PUT /api/admin/content/update-footer-link/:id
+
+Update an existing footer link.
+
+##### Headers
+
+```
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: application/json
+```
+
+##### Request Body
+
+```json
+{
+    "title": "About Us Updated",
+    "path": "/about-us"
+}
+```
+
+#### DELETE /api/admin/content/delete-footer-link/:id
+
+Delete a footer link by its ID.
+
+##### Headers
+
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+##### Success Response (200 OK)
+
+```json
+{
+    "success": true,
+    "message": "Footer link deleted successfully"
+}
+```

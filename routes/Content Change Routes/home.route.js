@@ -24,5 +24,17 @@ router.delete('/delete-curated-offer/:id', protect, authorize('admin'), deleteOf
 // Get Curated Offers
 router.get('/get-curated-offers', protect, getOffers);
 
+// routes for footer links
+const { addFooterLinks, getFooterLinks, updateFooterLink, deleteFooterLink } = require('../../controllers/Dynamic Content/Home Page/footer.controller');
+// Add Footer Links
+router.post('/add-footer-link', protect, authorize('admin'), addFooterLinks);
+// Get Footer Links
+router.get('/get-footer-links', protect, getFooterLinks);
+// Update Footer Link
+router.put('/update-footer-link/:id', protect, authorize('admin'), updateFooterLink);
+// Delete Footer Link
+router.delete('/delete-footer-link/:id', protect, authorize('admin'), deleteFooterLink);
+
+
 
 module.exports = router;
