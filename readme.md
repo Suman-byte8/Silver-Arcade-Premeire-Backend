@@ -547,5 +547,92 @@ Authorization: Bearer <JWT_TOKEN>
     "message": "Hero banner deleted successfully"
 }
 ```
+### 7. Curated Offers Management
 
+These endpoints manage the curated offers content on the home page.
+
+#### GET /api/admin/content/get-curated-offers
+
+Retrieve the current curated offers.
+
+##### Success Response (200 OK)
+
+```json
+{
+    "success": true,
+    "offers": []
+}
+```
+
+#### POST /api/admin/content/add-curated-offer
+
+Add a new curated offer. Requires `multipart/form-data` for the image upload.
+
+##### Headers
+
+```
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: multipart/form-data
+```
+
+##### Form Data
+
+-   `title` (String): The title of the offer.
+-   `description` (String): A short description of the offer.
+-   `path` (String): The URL path for the offer.
+-   `image` (File): The offer image file.
+
+##### Success Response (201 Created)
+
+```json
+{
+    "success": true,
+    "message": "Curated offer added successfully",
+    "offer": {
+        "title": "curated offer",
+        "description": "lorem ipsum",
+        "image": "https://res.cloudinary.com/dybk0f5nc/image/upload/v1754208733/taltala_subharambha_p1qj1l.png",
+        "path": "curated-offer.in",
+        "_id": "688f1cdd5e60b5d3e8f6b8e8",
+        "createdAt": "2025-08-03T08:12:13.384Z",
+        "__v": 0
+    }
+}
+```
+
+#### PUT /api/admin/content/update-curated-offer/:id
+
+Update an existing curated offer. Also uses `multipart/form-data` if a new image is provided.
+
+##### Headers
+
+```
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: multipart/form-data
+```
+
+##### Form Data
+
+-   `title` (String): The updated title.
+-   `description` (String): The updated description.
+-   `path` (String): The updated path.
+-   `image` (File, optional): A new image file to replace the existing one.
+
+#### DELETE /api/admin/content/delete-curated-offer/:id
+
+Delete a curated offer by its ID.
+
+##### Headers
+
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+##### Success Response (200 OK)
+
+```json
+{
+    "success": true,
+    "message": "Curated offer deleted successfully"
+}
 ```
