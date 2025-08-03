@@ -47,4 +47,16 @@ router.delete('/delete-membership-block/:id', protect, authorize('admin'), delet
 // Get Membership Blocks
 router.get('/get-membership-blocks', protect, getMembershipBlocks);
 
+
+// routes for nav links
+const { addNavLink, updateNavLink, deleteNavLink, getNavLinks } = require('../../controllers/Dynamic Content/Home Page/navLinks.controller');
+// Add Nav Link
+router.post('/add-nav-link', protect, authorize('admin'), addNavLink);
+// Update Nav Link
+router.put('/update-nav-link/:id', protect, authorize('admin'), updateNavLink);
+// Delete Nav Link
+router.delete('/delete-nav-link/:id', protect, authorize('admin'), deleteNavLink);
+// Get Nav Links
+router.get('/get-nav-links', protect, getNavLinks);
+
 module.exports = router;

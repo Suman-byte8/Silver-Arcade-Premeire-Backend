@@ -816,3 +816,100 @@ Authorization: Bearer <JWT_TOKEN>
     "message": "Membership Block deleted successfully"
 }
 ```
+### 10. Nav Links Management
+
+These endpoints manage the navigation links.
+
+#### GET /api/admin/content/get-nav-links
+
+Retrieve all navigation links.
+
+##### Success Response (200 OK)
+
+```json
+{
+    "success": true,
+    "data": []
+}
+```
+
+#### POST /api/admin/content/add-nav-link
+
+Add a new navigation link.
+
+##### Headers
+
+```
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: application/json
+```
+
+##### Request Body
+
+```json
+{
+    "title": "Home",
+    "path": "/",
+    "icon": "home-icon",
+    "order": 1
+}
+```
+
+##### Success Response (201 Created)
+
+```json
+{
+    "success": true,
+    "message": "Nav Link added successfully",
+    "data": {
+        "title": "Home",
+        "path": "/",
+        "icon": "home-icon",
+        "order": 1,
+        "_id": "688f3a085e60b5d3e8f6b903",
+        "createdAt": "2025-08-03T09:30:48.834Z",
+        "__v": 0
+    }
+}
+```
+
+#### PUT /api/admin/content/update-nav-link/:id
+
+Update an existing navigation link.
+
+##### Headers
+
+```
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: application/json
+```
+
+##### Request Body
+
+```json
+{
+    "title": "Home Updated",
+    "path": "/home",
+    "icon": "home-updated-icon",
+    "order": 1
+}
+```
+
+#### DELETE /api/admin/content/delete-nav-link/:id
+
+Delete a navigation link by its ID.
+
+##### Headers
+
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+##### Success Response (200 OK)
+
+```json
+{
+    "success": true,
+    "message": "Nav Link deleted successfully"
+}
+```
